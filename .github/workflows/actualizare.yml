@@ -1,0 +1,23 @@
+name: Actualizare preturi.txt manual
+
+on:
+  workflow_dispatch:  # rulează doar manual
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Adaugă linie în preturi.txt
+        run: |
+          echo "Pret actualizat la $(date '+%Y-%m-%d %H:%M:%S')" >> preturi.txt
+
+      - name: Commit & push modificări
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add preturi.txt
+          git commit -m "Actualizare automată preturi $(date '+%Y-%m-%d %H:%M:%S')" || echo "Nicio modificare de comis"
+          git push
